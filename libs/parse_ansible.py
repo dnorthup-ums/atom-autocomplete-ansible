@@ -12,6 +12,16 @@ from ansible.playbook.block import Block
 from ansible.playbook.role import Role
 from ansible.playbook.task import Task
 from ansible.utils.display import Display
+from ansible.release import __version__ as ansible_version
+
+try:
+    from packaging.version import parse
+    compat_29 = parse(ansible_version) >= parse("2.9.0") and parse(ansible_version) < parse("2.10.0")
+except Exception as e:
+    from distutils.version import LooseVersion
+    compat_29 = LooseVersion(ansible_version) >= LooseVersion("2.9.0") and LooseVersion(ansible_version) < LooseVersion("2.10.0")
+
+
 
 try:
     from ansible.plugins.loader import lookup_loader, module_loader
@@ -33,6 +43,7 @@ except ImportError:
 
 __main__.display = Display()
 doc_cli = DocCLI(['ansible atom'])
+
 
 
 def get_module_list():
